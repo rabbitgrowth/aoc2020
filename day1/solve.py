@@ -9,5 +9,5 @@ def solve(nums, r):
 if __name__ == '__main__':
     with open('input.txt') as f:
         nums = [int(line) for line in f]
-        print(solve(nums, 2))
-        print(solve(nums, 3))
+    print(solve(nums, 2))
+    print(solve(nums, 3))
