@@ -1,11 +1,10 @@
-import operator
-from functools import reduce
+import math
 from itertools import combinations
 
 def solve(nums, r):
     for combination in combinations(nums, r):
         if sum(combination) == 2020:
-            return reduce(operator.mul, combination)
+            return math.prod(combination)
 
 if __name__ == '__main__':
     with open('input.txt') as f:
