@@ -16,8 +16,7 @@ if __name__ == '__main__':
             x, y, letter, password = parse(line)
             if x <= password.count(letter) <= y:
                 count1 += 1
-            if sum([password[x - 1] == letter,
-                    password[y - 1] == letter]) == 1:
+            if sum(password[index - 1] == letter for index in [x, y]) == 1:
                 count2 += 1
     print(count1)
     print(count2)
