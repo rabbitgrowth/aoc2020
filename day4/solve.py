@@ -19,9 +19,9 @@ fields = {
     'iyr': lambda iyr: 2010 <= int(iyr) <= 2020,
     'eyr': lambda eyr: 2020 <= int(eyr) <= 2030,
     'hgt': verify_hgt,
-    'hcl': lambda hcl: re.search(r'^#[0-9a-f]{6}$', hcl),
+    'hcl': lambda hcl: re.search(r'^#[0-9a-f]{6}$', hcl) is not None,
     'ecl': lambda ecl: ecl in {'amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'},
-    'pid': lambda pid: re.search(r'^[0-9]{9}$', pid),
+    'pid': lambda pid: re.search(r'^[0-9]{9}$', pid) is not None,
     # cid is ignored
 }
 
