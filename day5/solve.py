@@ -20,4 +20,9 @@ def seat_id(seat):
 
 if __name__ == '__main__':
     with open('input.txt') as f:
-        print(max(seat_id(line.strip()) for line in f))
+        seat_ids = {seat_id(line.strip()) for line in f}
+        print(max(seat_ids))
+        for seat_id in sorted(seat_ids):
+            if seat_id + 1 not in seat_ids:
+                print(seat_id + 1)
+                break
