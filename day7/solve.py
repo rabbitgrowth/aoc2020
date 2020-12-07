@@ -6,13 +6,15 @@ with open('input.txt') as f:
     for line in f:
         line = line.removesuffix('.\n')
         before, after = line.split(' contain ')
-        colour = desuffix(before)
-        if after == 'no other bags':
-            contains = {}
-        else:
-            contains = {desuffix(bag.split(maxsplit=1)[1]) # ignore number for now
-                        for bag in after.split(', ')}
-        BAGS[colour] = contains
+        bag = desuffix(before)
+        subbags = {}
+        if after != 'no other bags':
+            for item in after.split(', '):
+                number, subbag = item.split(maxsplit=1)
+                number = int(number)
+                subbag = desuffix(subbag)
+                subbags[subbag] = number
+        BAGS[bag] = subbags
 
 def find_shiny_gold(bag):
     subbags = BAGS[bag]
