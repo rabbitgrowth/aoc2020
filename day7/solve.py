@@ -24,3 +24,13 @@ def find_shiny_gold(bag):
         return any(find_shiny_gold(subbag) for subbag in subbags)
 
 print(sum(find_shiny_gold(bag) for bag in BAGS))
+
+def total_weight(bag, multiplier=1):
+    subbags = BAGS[bag]
+    return (
+        sum(subbags.values()) * multiplier
+        + sum(total_weight(subbag, multiplier=multiplier*number)
+              for subbag, number in subbags.items())
+    )
+
+print(total_weight('shiny gold'))
