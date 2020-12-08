@@ -1,5 +1,14 @@
 from copy import copy
 
+def parse(file):
+    program = []
+    with open(file) as f:
+        for line in f:
+            operation, argument = line.split()
+            argument = int(argument)
+            program.append((operation, argument))
+    return program
+
 def run(program):
     pointer     = 0
     accumulator = 0
@@ -19,25 +28,23 @@ def run(program):
         if pointer == len(program):
             return accumulator, 0 # "program terminated normally"
 
-with open('input.txt') as f:
-    program = []
-    for line in f:
-        operation, argument = line.split()
-        argument = int(argument)
-        program.append((operation, argument))
+if __name__ == '__main__':
+    program = parse('input.txt')
 
-accumulator, exit_status = run(program)
-assert exit_status == 1
-print(accumulator)
+    # Part 1
+    accumulator, exit_status = run(program)
+    assert exit_status == 1
+    print(accumulator)
 
-for i, (operation, argument) in enumerate(program):
-    program_copy = copy(program)
-    if operation == 'jmp':
-        program_copy[i] = ('nop', argument)
-    elif operation == 'nop':
-        program_copy[i] = ('jmp', argument)
-    else:
-        continue
-    accumulator, exit_status = run(program_copy)
-    if exit_status == 0:
-        print(accumulator)
+    # Part 2
+    for i, (operation, argument) in enumerate(program):
+        program_copy = copy(program)
+        if operation == 'jmp':
+            program_copy[i] = ('nop', argument)
+        elif operation == 'nop':
+            program_copy[i] = ('jmp', argument)
+        else:
+            continue
+        accumulator, exit_status = run(program_copy)
+        if exit_status == 0:
+            print(accumulator)
