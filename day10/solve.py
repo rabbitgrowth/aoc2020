@@ -13,16 +13,12 @@ print(diffs[1] * diffs[3])
 
 end = nums[-1]
 numset = set(nums)
-ways = 0
 
-def branch(num):
-    global ways
-    for i in [1, 2, 3]:
-        child = num + i
-        if child == end:
-            ways += 1
-        elif child in numset:
-            branch(child)
+def ways(num):
+    children = [child
+                for i in [1, 2, 3]
+                if (child := num + i) in numset]
+    return ((num == end)
+            + sum(ways(child) for child in children))
 
-branch(0)
-print(ways)
+print(ways(0))
