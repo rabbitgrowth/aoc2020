@@ -1,29 +1,25 @@
 from collections import Counter
 
 with open('input.txt') as f:
-    nums = sorted(int(line) for line in f)
+    xs = sorted(int(line) for line in f)
 
-# Connections to outlet and built-in adapter
-diffs = Counter([nums[0], 3])
+start, end = xs[0], xs[-1]
 
-for x, y in zip(nums, nums[1:]):
-    diffs[y - x] += 1
+diffs = Counter([start, 3]) # connections to outlet and built-in adapter
+diffs.update(y - x for x, y in zip(xs, xs[1:]))
 
 print(diffs[1] * diffs[3])
 
-end = nums[-1]
-numset = set(nums)
+xset = set(xs)
 memo = {}
 
-def ways(num):
-    if num in memo:
-        return memo[num]
-    children = [child
-                for i in [1, 2, 3]
-                if (child := num + i) in numset]
-    result = ((num == end)
-              + sum(ways(child) for child in children))
-    memo[num] = result
-    return result
+def paths(x):
+    try:
+        return memo[x]
+    except KeyError:
+        ys = (y for y in range(x + 1, x + 4) if y in xset)
+        result = (x == end) + sum(paths(child) for child in ys)
+        memo[x] = result
+        return result
 
-print(ways(0))
+print(paths(0))
