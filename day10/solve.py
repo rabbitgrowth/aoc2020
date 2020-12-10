@@ -13,12 +13,17 @@ print(diffs[1] * diffs[3])
 
 end = nums[-1]
 numset = set(nums)
+memo = {}
 
 def ways(num):
+    if num in memo:
+        return memo[num]
     children = [child
                 for i in [1, 2, 3]
                 if (child := num + i) in numset]
-    return ((num == end)
-            + sum(ways(child) for child in children))
+    result = ((num == end)
+              + sum(ways(child) for child in children))
+    memo[num] = result
+    return result
 
 print(ways(0))
