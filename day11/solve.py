@@ -35,6 +35,6 @@ def circumambulate(x, y):
 while True:
     new_board = advance(board)
     if new_board == board: # stabilized
-        print(sum(cell == '#' for row in board for cell in row))
+        print(sum(row.count('#') for row in new_board))
         break
     board = new_board
