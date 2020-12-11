@@ -45,39 +45,41 @@ class Board:
 
     def advance(self, part):
         if part == 1:
-            threshold = 4
+            circumambulator = self.neighbours
+            threshold       = 4
         elif part == 2:
-            threshold = 5
+            circumambulator = self.visual_neighbours
+            threshold       = 5
         else:
             raise ValueError('Part must be 1 or 2')
         new_board = deepcopy(self)
         for x, y, cell in self:
             if cell in 'L#':
-                occupied = self.neighbours(x, y, part).count('#')
+                occupied = circumambulator(x, y).count('#')
                 if cell == 'L' and occupied == 0:
                     new_board.set(x, y, '#')
                 elif cell == '#' and occupied >= threshold:
                     new_board.set(x, y, 'L')
         return new_board
 
-    def neighbours(self, x, y, part):
+    def neighbours(self, x, y):
         cells = []
-        if part == 1:
-            for dx, dy in self.dxdy:
-                cell = self.get(x + dx, y + dy)
-                if cell is not None:
+        for dx, dy in self.dxdy:
+            cell = self.get(x + dx, y + dy)
+            if cell is not None:
+                cells.append(cell)
+        return cells
+
+    def visual_neighbours(self, x, y):
+        cells = []
+        for dx, dy in self.dxdy:
+            for i in count(1):
+                cell = self.get(x + i*dx, y + i*dy)
+                if cell is None:
+                    break
+                elif cell in 'L#':
                     cells.append(cell)
-        elif part == 2:
-            for dx, dy in self.dxdy:
-                for i in count(1):
-                    cell = self.get(x + i*dx, y + i*dy)
-                    if cell is None:
-                        break
-                    elif cell in 'L#':
-                        cells.append(cell)
-                        break
-        else:
-            raise ValueError('Part must be 1 or 2')
+                    break
         return cells
 
     def count(self, cell):
