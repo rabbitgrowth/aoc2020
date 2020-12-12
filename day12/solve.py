@@ -13,8 +13,10 @@ with open('input.txt') as f:
         num = int(num)
         moves.append((op, num))
 
-x, y = 0, 0
-reldx, reldy = DIRECTIONS['E']
+x1, y1 = 0, 0
+x2, y2 = 0, 0
+reldx, reldy = DIRECTIONS['E'] # Part 1: ship starts by facing east
+waydx, waydy = 10, -1          # Part 2: waypoint starts at 10E 1N
 
 for op, num in moves:
     if op in 'LR':
@@ -23,14 +25,20 @@ for op, num in moves:
         rotate = clockwise if op == 'R' else anticlockwise
         for _ in range(steps):
             reldx, reldy = rotate(reldx, reldy)
+            waydx, waydy = rotate(waydx, waydy)
     elif op == 'F':
-        x += reldx * num
-        y += reldy * num
+        x1 += reldx * num
+        y1 += reldy * num
+        x2 += waydx * num
+        y2 += waydy * num
     elif op in 'ESWN':
         absdx, absdy = DIRECTIONS[op]
-        x += absdx * num
-        y += absdy * num
+        x1    += absdx * num
+        y1    += absdy * num
+        waydx += absdx * num
+        waydy += absdy * num
     else:
         raise ValueError(f'Invalid operation {op}')
 
-print(abs(x) + abs(y))
+print(abs(x1) + abs(y1))
+print(abs(x2) + abs(y2))
