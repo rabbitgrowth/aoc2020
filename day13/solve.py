@@ -1,3 +1,4 @@
+import math
 from collections import namedtuple
 from itertools   import count
 
@@ -10,10 +11,9 @@ with open('input.txt') as f:
              if bus != 'x']
 
 found = False
-for timestamp in count(start):
+for wait, timestamp in enumerate(count(start)):
     for bus in buses:
         if timestamp % bus.id == 0:
-            wait = timestamp - start
             print(wait * bus.id)
             found = True
             break
