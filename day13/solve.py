@@ -19,3 +19,12 @@ for wait, timestamp in enumerate(count(start)):
             break
     if found:
         break
+
+time = 0
+step = 1
+for bus1, bus2 in zip(buses, buses[1:]):
+    step = math.lcm(step, bus1.id)
+    for time in count(time, step):
+        if (time + bus2.offset) % bus2.id == 0:
+            break
+print(time)
