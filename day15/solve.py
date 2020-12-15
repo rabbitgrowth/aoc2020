@@ -6,12 +6,7 @@ haystack = dict(zip(INPUT[:-1], count(1)))
 needle   = INPUT[-1]
 
 for turn in range(len(INPUT), 30_000_000):
-    try:
-        index = haystack[needle]
-    except KeyError:
-        number = 0
-    else:
-        number = turn - index
+    number = turn - haystack[needle] if needle in haystack else 0
     haystack[needle] = turn
     needle = number
 
