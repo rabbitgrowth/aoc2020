@@ -5,9 +5,7 @@ INPUT = [12, 20, 0, 6, 1, 17, 7]
 haystack = dict(zip(INPUT[:-1], count(1)))
 needle   = INPUT[-1]
 
-turn = len(INPUT)
-
-while True:
+for turn in range(len(INPUT), 30_000_000):
     try:
         index = haystack[needle]
     except KeyError:
@@ -15,8 +13,6 @@ while True:
     else:
         number = turn - index
     haystack[needle] = turn
-    turn += 1
-    if turn == 30_000_000:
-        print(number)
-        break
     needle = number
+
+print(number)
