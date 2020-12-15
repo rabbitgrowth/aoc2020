@@ -1,17 +1,22 @@
-from itertools import count
+INPUT = [12, 20, 0, 6, 1, 17, 7]
 
-numbers = [12, 20, 0, 6, 1, 17, 7]
+haystack = {number: index for index, number in enumerate(INPUT[:-1])}
+needle   = INPUT[-1]
 
-for _ in range(2020 - len(numbers)):
-    init, last = numbers[:-1], numbers[-1]
+turn = len(haystack)
+
+while True:
     try:
-        index = next(index
-                     for index, number in zip(count(len(init) - 1, -1), reversed(init))
-                     if number == last)
-    except StopIteration:
+        index = haystack[needle]
+    except KeyError:
         number = 0
     else:
-        number = len(init) - index
-    numbers.append(number)
-
-print(numbers[-1])
+        number = turn - index
+    haystack[needle] = turn
+    turn += 1
+    if turn == 2020 - 1: # I know it's inefficient to check this ~30,000,000 times
+        print(number)
+    elif turn == 30_000_000 - 1:
+        print(number)
+        break
+    needle = number
