@@ -16,9 +16,7 @@ while True:
         number = turn - index
     haystack[needle] = turn
     turn += 1
-    if turn == 2020: # I know it's inefficient to check this ~30,000,000 times
-        print(number)
-    elif turn == 30_000_000:
+    if turn == 30_000_000:
         print(number)
         break
     needle = number
