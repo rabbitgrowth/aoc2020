@@ -1,4 +1,5 @@
 import re
+from itertools import chain
 
 with open('input.txt') as f:
     par1, par2, par3 = f.read().split('\n\n')
@@ -26,3 +27,26 @@ for values in nearby:
         valid_nearby.append(values)
 
 print(error_rate) # Part 1
+
+rows    = chain((mine,), valid_nearby)
+columns = [list(values) for values in zip(*rows)]
+
+choices = [(index, {field
+                    for field, ranges in constraints.items()
+                    if all(any(value in range_ for range_ in ranges)
+                           for value in column)})
+           for index, column in enumerate(columns)]
+
+seen              = set()
+translated_fields = []
+
+for index, fields in sorted(choices, key=lambda tpl: len(tpl[1])):
+    (field,) = fields - seen # only works for this particular input
+    seen.add(field)
+    translated_fields.append((index, field))
+
+answer = 1
+for index, field in translated_fields:
+    if field.startswith('departure'):
+        answer *= mine[index]
+print(answer) # Part 2
