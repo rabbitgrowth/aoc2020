@@ -1,16 +1,15 @@
 import re
 
-constraints, mine, nearby = {}, [], []
-
 with open('input.txt') as f:
     par1, par2, par3 = f.read().split('\n\n')
+    constraints = {}
     for line in par1.splitlines():
         field, rhs = line.split(': ')
         min1, max1, min2, max2 = map(int, re.findall(r'\d+', rhs))
         constraints[field] = (range(min1, max1 + 1), range(min2, max2 + 1))
-    for lst, par in ((mine, par2), (nearby, par3)):
-        for line in par.splitlines()[1:]:
-            lst.append(list(map(int, line.split(','))))
+    mine = list(map(int, par2.splitlines()[1].split(',')))
+    nearby = [list(map(int, line.split(',')))
+              for line in par3.splitlines()[1:]]
 
 valid_nearby = []
 error_rate = 0
