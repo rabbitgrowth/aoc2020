@@ -12,9 +12,18 @@ with open('input.txt') as f:
         for line in par.splitlines()[1:]:
             lst.append(list(map(int, line.split(','))))
 
-print(sum(value
-          for values in nearby
-          for value in values
-          if all(value not in range_
-                 for ranges in constraints.values()
-                 for range_ in ranges)))
+valid_nearby = []
+error_rate = 0
+
+for values in nearby:
+    error = False
+    for value in values:
+        if all(value not in range_
+               for ranges in constraints.values()
+               for range_ in ranges):
+            error_rate += value
+            error = True
+    if not error:
+        valid_nearby.append(values)
+
+print(error_rate) # Part 1
