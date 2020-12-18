@@ -40,4 +40,4 @@ def calculate(expression):
     return group(tokens)
 
 with open('input.txt') as f:
-    print(sum(calculate(line.strip()) for line in f))
+    print(sum(calculate(line) for line in f))
