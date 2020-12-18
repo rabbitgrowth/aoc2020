@@ -24,15 +24,12 @@ def evaluate(tokens):
     stack = [queue.popleft()]
     while queue:
         stack.extend(queue.popleft() for _ in range(2))
-        if not queue:
-            break
-        peek = queue[0]
+        peek = queue[0] if queue else None
         reduce(stack, peek)
-    reduce(stack)
     (result,) = stack
     return result
 
-def reduce(stack, peek=None):
+def reduce(stack, peek):
     while len(stack) > 1:
         function = stack[-2]
         if peek is None or function.precedence >= peek.precedence:
