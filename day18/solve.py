@@ -5,6 +5,7 @@ WORD = re.compile(r'\d+|[+*()]')
 FUNCTIONS = {'+': add, '*': mul}
 
 def tokenize(expression):
+    yield '('
     for word in WORD.findall(expression):
         if word in FUNCTIONS:
             yield FUNCTIONS[word]
@@ -12,6 +13,7 @@ def tokenize(expression):
             yield word
         else:
             yield int(word)
+    yield ')'
 
 def group(tokens):
     groups = []
@@ -36,3 +38,6 @@ def evaluate(tokens):
 def calculate(expression):
     tokens = tokenize(expression)
     return group(tokens)
+
+with open('input.txt') as f:
+    print(sum(calculate(line.strip()) for line in f))
