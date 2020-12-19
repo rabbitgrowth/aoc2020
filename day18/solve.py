@@ -3,19 +3,20 @@ from collections import deque, namedtuple
 from operator    import add, mul
 
 WORD = re.compile(r'\d+|[+*()]')
-FUNCTIONS = {'+': add, '*': mul}
 
 Function = namedtuple('Function', 'function precedence')
 
-def tokenize(expression):
-    precedence = 0
+def tokenize(expression, add_precedence=False):
+    level = 0
     for word in WORD.findall(expression):
-        if word in FUNCTIONS:
-            yield Function(FUNCTIONS[word], precedence)
+        if word == '+':
+            yield Function(add, level + add_precedence)
+        elif word == '*':
+            yield Function(mul, level)
         elif word == '(':
-            precedence += 1
+            level += 2
         elif word == ')':
-            precedence -= 1
+            level -= 2
         else:
             yield int(word)
 
@@ -39,9 +40,11 @@ def reduce(stack, peek):
         else:
             break
 
-def calculate(expression):
-    tokens = tokenize(expression)
+def calculate(expression, add_precedence=False):
+    tokens = tokenize(expression, add_precedence=add_precedence)
     return evaluate(tokens)
 
 with open('input.txt') as f:
-    print(sum(map(calculate, f)))
+    lines = list(f)
+    print(sum(calculate(line)                      for line in lines))
+    print(sum(calculate(line, add_precedence=True) for line in lines))
