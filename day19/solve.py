@@ -32,8 +32,23 @@ def expand(tokens, grammar):
 
 with open('input.txt') as f:
     par1, par2 = f.read().split('\n\n')
-    grammar  = parse(par1)
-    regex    = re.compile('^' + expand((0,), grammar) + '$')
-    messages = par2.splitlines()
-    print(sum(regex.search(message) is not None
-              for message in messages))
+    grammar    = parse(par1)
+    messages   = par2.splitlines()
+    zero       = expand(( 0,), grammar)
+    forty_two  = expand((42,), grammar)
+    thirty_one = expand((31,), grammar)
+    regex1     = re.compile(f'^{zero}$')
+    regex2     = re.compile(f'^(({forty_two})+)(({thirty_one})+)$')
+    count1     = 0
+    count2     = 0
+    for message in messages:
+        if regex1.search(message):
+            count1 += 1
+        match2 = regex2.search(message)
+        if match2:
+            forty_twos  = len(match2.group(1)) // len(match2.group(2))
+            thirty_ones = len(match2.group(3)) // len(match2.group(4))
+            if forty_twos > thirty_ones:
+                count2 += 1
+    print(count1)
+    print(count2)
