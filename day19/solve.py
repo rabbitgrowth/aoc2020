@@ -6,12 +6,12 @@ rules = {
 }
 
 def expand(tokens):
-    result = []
+    result = ''
     for token in tokens:
         if token not in rules: # cannot be expanded further
-            result.append(token)
+            result += token
         else:
-            result.extend(expand(rules[token]))
+            result += expand(rules[token])
     return result
 
 print(expand([0]))
