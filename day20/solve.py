@@ -81,3 +81,42 @@ for row in puzzle:
             if found:
                 break
         tiles.pop(tile_id)
+
+def remove_border(tile):
+    return tuple(row[1:-1] for row in tile[1:-1])
+
+def merge(puzzle):
+    return tuple(tuple(pixel for subrow in subrows for pixel in subrow)
+                 for row in puzzle
+                 for subrows in zip(*row))
+
+sea = merge([[remove_border(tile) for tile in row] for row in puzzle])
+
+monster = ('                  # ',
+           '#    ##    ##    ###',
+           ' #  #  #  #  #  #   ')
+
+def scan(sea, monster):
+    swidth  = len(sea[0])
+    sheight = len(sea)
+    mwidth  = len(monster[0])
+    mheight = len(monster)
+    for x in range(swidth - mwidth + 1):
+        for y in range(sheight - mheight + 1):
+            yield tuple(row[x : x + mwidth]
+                        for row in sea[y : y + mheight])
+
+def contains_monster(sea, monster):
+    for srow, mrow in zip(sea, monster):
+        for spixel, mpixel in zip(srow, mrow):
+            if spixel == '.' and mpixel == '#':
+                return False
+    return True
+
+for form in transform(sea):
+    monsters = sum(contains_monster(area, monster)
+                   for area in scan(form, monster))
+    if monsters != 0:
+        spixels = sum(row.count('#') for row in sea)
+        mpixels = sum(row.count('#') for row in monster)
+        print(spixels - mpixels * monsters)
