@@ -1,27 +1,47 @@
-from itertools import chain
+from copy     import copy
+from operator import mul
+
+def follow(links, cup, n):
+    for _ in range(n):
+        yield (cup := links[cup])
+
+def link(cups):
+    return {a: b for a, b in zip(cups, [*cups[1:], cups[0]])}
 
 with open('input.txt') as f:
-    cups = list(map(int, f.read().strip()))
+    cups1 = list(map(int, f.read().strip()))
+    cups2 = copy(cups1)
+    cups2.extend(range(len(cups1) + 1, 1_000_000 + 1))
 
-curr_idx = 0
+links1 = link(cups1)
+links2 = link(cups2)
 
-for move in range(100):
-    curr = cups[curr_idx]
-    pick_idx = curr_idx + 1
-    picks = []
-    for offset in range(1, 4):
-        try:
-            picks.append(cups.pop(pick_idx))
-        except IndexError:
-            picks.append(cups.pop(0))
-    try:
-        dest = max(cup for cup in cups if cup < curr)
-    except ValueError:
-        dest = max(cups)
-    dest_idx = cups.index(dest)
-    for pick in reversed(picks):
-        cups.insert(dest_idx + 1, pick)
-    curr_idx = (cups.index(curr) + 1) % len(cups)
+def show1(links):
+    print(''.join(map(str, follow(links, 1, len(links) - 1))))
 
-print(''.join(map(str, chain(cups[cups.index(1)+1:],
-                             cups[:cups.index(1)]))))
+def show2(links):
+    print(mul(*follow(links, 1, 2)))
+
+for links, times, show in ((links1, 100,        show1),
+                           (links2, 10_000_000, show2)):
+    current = cups1[0]
+
+    for _ in range(times):
+        picks = list(follow(links, current, 3))
+        links[current] = links[picks[-1]]
+
+        dest = current - 1
+        while True:
+            if dest not in picks and dest in links:
+                break
+            if dest < 1:
+                dest = len(links)
+                continue
+            dest -= 1
+
+        links[picks[-1]] = links[dest]
+        links[dest]      = picks[0]
+
+        current = links[current]
+
+    show(links)
