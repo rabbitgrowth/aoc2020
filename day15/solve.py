@@ -1,8 +1,6 @@
-from itertools import count
-
 INPUT = [12, 20, 0, 6, 1, 17, 7]
 
-haystack = dict(zip(INPUT[:-1], count(1)))
+haystack = {n: turn for turn, n in enumerate(INPUT[:-1], 1)}
 needle   = INPUT[-1]
 
 for turn in range(len(INPUT), 30_000_000):
