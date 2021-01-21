@@ -31,8 +31,7 @@ with open('input.txt') as f:
                 elif m == 'X':
                     masked.append('01')
             for combination in product(*masked):
-                index = int(''.join(combination), base=2) # convert to decimal just to be neat
-                memory2[index] = value
+                memory2[combination] = value
 
 print(sum(memory1.values()))
 print(sum(memory2.values()))
