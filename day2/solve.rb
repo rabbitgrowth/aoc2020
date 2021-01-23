@@ -1,20 +1,16 @@
 PATTERN = /(\d+)-(\d+) (.): (.+)/
 
-count1 = 0
-count2 = 0
+lines = File.foreach('input.txt').map do |line|
+  x, y, letter, password = PATTERN.match(line).captures
+  [x.to_i, y.to_i, letter, password]
+end
 
-File.open('input.txt') do |file|
-  file.each_line do |line|
-    x, y, letter, password = PATTERN.match(line).captures
-    x = x.to_i
-    y = y.to_i
-    if password.count(letter).between?(x, y)
-      count1 += 1
-    end
-    if [password[x-1], password[y-1]].count(letter) == 1
-      count2 += 1
-    end
-  end
+count1 = lines.count do |min, max, letter, password|
+  password.count(letter).between?(min, max)
+end
+
+count2 = lines.count do |i, j, letter, password|
+  [password[i-1], password[j-1]].count(letter) == 1
 end
 
 puts count1
