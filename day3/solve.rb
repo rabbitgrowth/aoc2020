@@ -4,18 +4,10 @@ WIDTH  = MAP[0].size
 HEIGHT = MAP.size
 
 def count_trees(dx, dy)
-  trees = 0
-  x = 0
-  y = 0
-  loop do
-    x += dx
-    y += dy
-    break if y >= HEIGHT
-    if MAP[y][x % WIDTH] == '#'
-      trees += 1
-    end
+  (0...HEIGHT).step(dy).each_with_index.count do |y, i|
+    x = (dx * i) % WIDTH
+    MAP[y][x] == '#'
   end
-  trees
 end
 
 puts count_trees(3, 1)
