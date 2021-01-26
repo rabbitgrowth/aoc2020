@@ -6,26 +6,13 @@ def validate1(passport)
 end
 
 def validate2(passport)
-  passport.all? do |key, value|
-    case key
-    when 'byr'
-      value.to_i.between?(1920, 2002)
-    when 'iyr'
-      value.to_i.between?(2010, 2020)
-    when 'eyr'
-      value.to_i.between?(2020, 2030)
-    when 'hgt'
-      validate_hgt(value)
-    when 'hcl'
-      value =~ /^#[0-9a-f]/
-    when 'ecl'
-      ECLS.include?(value)
-    when 'pid'
-      value =~ /^[0-9]{9}$/
-    when 'cid'
-      true
-    end
-  end
+  passport['byr'].to_i.between?(1920, 2002) &&
+  passport['iyr'].to_i.between?(2010, 2020) &&
+  passport['eyr'].to_i.between?(2020, 2030) &&
+  validate_hgt(passport['hgt'])             &&
+  passport['hcl'] =~ /^#[0-9a-f]/           &&
+  ECLS.include?(passport['ecl'])            &&
+  passport['pid'] =~ /^[0-9]{9}$/
 end
 
 def validate_hgt(value)
