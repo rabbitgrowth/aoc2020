@@ -1,5 +1,5 @@
-FIELDS = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
-ECLS   = ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth']
+FIELDS = %w(byr iyr eyr hgt hcl ecl pid)
+ECLS   = %w(amb blu brn gry grn hzl oth)
 
 def validate1(passport)
   FIELDS.all? { |field| passport.include?(field) }
