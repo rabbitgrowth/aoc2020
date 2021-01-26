@@ -2,7 +2,7 @@ FIELDS = %w(byr iyr eyr hgt hcl ecl pid)
 ECLS   = %w(amb blu brn gry grn hzl oth)
 
 def validate1(passport)
-  FIELDS.all? { |field| passport.include?(field) }
+  (FIELDS - passport.keys).empty?
 end
 
 def validate2(passport)
