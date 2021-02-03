@@ -1,36 +1,29 @@
-def desuffix(bag):
-    return bag.removesuffix('s').removesuffix(' bag')
+import re
+from collections import defaultdict
 
-BAGS = {}
+bottom_up = defaultdict(list)
+top_down  = defaultdict(list)
+
 with open('input.txt') as f:
     for line in f:
-        line = line.removesuffix('.\n')
-        before, after = line.split(' contain ')
-        bag = desuffix(before)
-        subbags = {}
-        if after != 'no other bags':
-            for item in after.split(', '):
-                number, subbag = item.split(maxsplit=1)
-                number = int(number)
-                subbag = desuffix(subbag)
-                subbags[subbag] = number
-        BAGS[bag] = subbags
+        outer, rhs = line.split(' bags contain ')
+        for count, inner in re.findall(r'(\d) (.+?) bag', rhs):
+            bottom_up[inner].append(outer)
+            top_down[outer].append((int(count), inner))
 
-def find_shiny_gold(bag):
-    subbags = BAGS[bag]
-    if 'shiny gold' in subbags:
-        return True
-    else:
-        return any(find_shiny_gold(subbag) for subbag in subbags)
+def possible_outers(bottom_up, bag, seen=set()):
+    for outer in bottom_up[bag]:
+        if outer not in seen:
+            seen.add(outer)
+            possible_outers(bottom_up, outer, seen)
+    return len(seen)
 
-print(sum(find_shiny_gold(bag) for bag in BAGS))
+def total_inners(top_down, bag):
+    total = 0
+    for count, inner in top_down[bag]:
+        total += count
+        total += count * total_inners(top_down, inner)
+    return total
 
-def total_weight(bag, multiplier=1):
-    subbags = BAGS[bag]
-    return (
-        sum(subbags.values()) * multiplier
-        + sum(total_weight(subbag, multiplier=multiplier*number)
-              for subbag, number in subbags.items())
-    )
-
-print(total_weight('shiny gold'))
+print(possible_outers(bottom_up, 'shiny gold'))
+print(total_inners(top_down, 'shiny gold'))
