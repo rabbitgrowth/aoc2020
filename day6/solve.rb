@@ -1,4 +1,7 @@
-groups = File.read('input.txt').split("\n\n").map { |group| group.split.map(&:chars) }
+groups = File.read('input.txt').split("\n\n").map do |group|
+  group.split.map(&:chars)
+end
 
-puts groups.map { |group| group.reduce(:|).size }.sum
-puts groups.map { |group| group.reduce(:&).size }.sum
+[:union, :intersection].each do |operation|
+  puts groups.map { |group| group.reduce(operation).size }.sum
+end
