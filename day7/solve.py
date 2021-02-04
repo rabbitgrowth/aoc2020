@@ -19,11 +19,8 @@ def possible_outers(bottom_up, bag, seen=set()):
     return len(seen)
 
 def total_inners(top_down, bag):
-    total = 0
-    for count, inner in top_down[bag]:
-        total += count
-        total += count * total_inners(top_down, inner)
-    return total
+    return sum(count * (1 + total_inners(top_down, inner))
+               for count, inner in top_down[bag])
 
 print(possible_outers(bottom_up, 'shiny gold'))
 print(total_inners(top_down, 'shiny gold'))
