@@ -35,12 +35,12 @@ print(accumulator)
 # Part 2
 for i, (operation, argument) in enumerate(program):
     program_copy = copy(program)
-    if operation == 'jmp':
+    if operation == 'acc':
+        continue
+    elif operation == 'jmp':
         program_copy[i] = ('nop', argument)
     elif operation == 'nop':
         program_copy[i] = ('jmp', argument)
-    else:
-        continue
     accumulator, exit_status = run(program_copy)
     if exit_status == 0:
         print(accumulator)
