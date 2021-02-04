@@ -20,10 +20,9 @@ def possible_outers(bottom_up, bag, seen = [])
 end
 
 def total_inners(top_down, bag)
-  top_down[bag].map do |count, inner|
+  top_down[bag].sum do |count, inner|
     count * (1 + total_inners(top_down, inner))
   end
-  .sum
 end
 
 puts possible_outers(bottom_up, 'shiny gold')
