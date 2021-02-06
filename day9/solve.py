@@ -1,16 +1,12 @@
 from collections import deque
 from itertools import combinations
 
-maxlen = 25
-
 with open('input.txt') as f:
-    nums = [int(line) for line in f]
+    nums = list(map(int, f))
 
-it = iter(nums)
-queue = deque(maxlen=maxlen)
-for _ in range(maxlen):
-    queue.append(next(it))
-for num in it:
+queue = deque(nums[:25], maxlen=25)
+
+for num in nums[25:]:
     if any(x + y == num for x, y in combinations(queue, 2)):
         queue.append(num)
     else:
@@ -26,7 +22,7 @@ for i, start in enumerate(nums):
         total += end
         if end < smallest:
             smallest = end
-        if end > largest:
+        elif end > largest:
             largest = end
         if total == invalid:
             weakness = smallest + largest
@@ -34,5 +30,7 @@ for i, start in enumerate(nums):
             break
         elif total > invalid:
             break
+    if found:
+        break
 
 print(weakness)
